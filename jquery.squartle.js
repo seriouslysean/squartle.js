@@ -1,4 +1,3 @@
-<?php
 /**
  * Splitleaf_Squartle
  *
