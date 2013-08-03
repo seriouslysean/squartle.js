@@ -25,6 +25,10 @@ Include jquery.squartle.min.js *after* you load the jQuery library:
 
     {
       containerClass: "squartle-container", // CSS class for the container
+      heroContainerClass: "squartle-heroes", // CSS class for the hero container
+      heroEnable: true, // Whether or not hero banners will be enabled
+      heroClass: "squartle-hero", // CSS class for the heroes
+      heroDefault: 0, // Which hero to show first
       listClass: "squartle-list", // CSS class for the list
       itemClass: "squartle-item", // CSS class for the list items
       imageClass: "squartle-image", // CSS class for the item images

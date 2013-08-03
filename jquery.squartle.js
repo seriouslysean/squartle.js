@@ -22,6 +22,10 @@
     // overrideable defaults
     var defaults = {
         containerClass: "squartle-container",
+        heroContainerClass: "squartle-heroes",
+        heroEnable: true,
+        heroClass: "squartle-hero",
+        heroDefault: 0,
         listClass: "squartle-list",
         itemClass: "squartle-item",
         imageClass: "squartle-image",
@@ -40,31 +44,43 @@
 
     Squartle.prototype = {
         init: function() {
-            this._setClasses();
-            this._setStyles();
-            this._setHover();
+            this._setClasses(this.element, this.options);
+            this._setStyles(this.element, this.options);
+            this._setHover(this.element, this.options);
+            if (this.options.heroEnable)
+                this._setHero(this.element, this.options);
         },
         
         // set element classes
-        _setClasses: function() {
-            $(this.element).addClass(this.options.containerClass);
-            $('ul', this.element).addClass(this.options.listClass);
-            $('li', this.element).addClass(this.options.itemClass);
-            $('img', this.element).addClass(this.options.imageClass);
+        _setClasses: function(element, options) {
+            $(element).addClass(options.containerClass);
+            $('> ul', element).addClass(options.listClass);
+            $('> ul > li', element).addClass(options.itemClass);
+            $('> ul > li div', element).addClass(options.heroClass);
+            $('> ul > li img', element).addClass(options.imageClass);
         },
 
         // set item styles
-        _setStyles: function() {
-            width = 100/this.options.itemsAcross;
-            $(this.element).css('overflow', 'hidden');
-            $('ul', this.element).css('overflow', 'hidden');;
-            $('li', this.element)
+        _setStyles: function(element, options) {
+            width = 100/options.itemsAcross;
+            $(element).css('overflow', 'hidden');
+            $('> ul', element).css('overflow', 'hidden');
+            $('> ul > li', element)
                 .css('overflow', 'hidden')
                 .css('float', 'left')
                 .css('display', 'block')
                 .css('position', 'relative')
                 .css('width', width+'%');
-            $('img', this.element)
+            $('> ul > li > div', element)
+                .css('overflow', 'hidden')
+                .css('position', 'relative')
+                .css('height', 'auto')
+                .css('width', '100%');
+            $('> ul > li > div', element).find('*')
+                .css('width', 'auto')
+                .css('height', 'auto')
+                .css('max-width', '100%')
+            $('> ul > li img', element)
                 .css('height', 'auto')
                 .css('width', 'auto')
                 .css('max-width', '100%')
@@ -74,19 +90,21 @@
         },
 
         // set hover
-        _setHover: function() {
-            options = this.options;
-            $('li', this.element).each(function(){
+        _setHover: function(element, options) {
+            $('li', element).each(function(){
                 links = $('a', this);
                 images = $('img', this);
                 if (links.length) {
                     links.each(function(){
                         link = $(this);
-                        image = $('> img', this);
+                        image = $('> img', link);
                         if (image.data('hover')) {
-                            hover = $('img')
+                            hover = $('<img>')
                                 .attr('src', image.data('hover'))
-                                .attr('alt', $(this).attr('alt'))
+                                .attr('alt', image.attr('alt'))
+                                .css('height', 'auto')
+                                .css('width', 'auto')
+                                .css('max-width', '100%')
                                 .css('position', 'absolute')
                                 .css('top', '0')
                                 .css('left', '0')
@@ -96,11 +114,36 @@
                             $(link).append(hover);
                             $(link).hover(function(e){
                                 e.preventDefault();
-                                $('> .'+options.imageHoverClass, this).finish().fadeIn('fast');
+                                if (!$(this).hasClass('active'))
+                                    $('> .'+options.imageHoverClass, this).finish().fadeIn('fast');
                             },
                             function(e){
                                 e.preventDefault();
-                                $('> .'+options.imageHoverClass, this).finish().fadeOut('fast');
+                                if (!$(this).hasClass('active'))
+                                    $('> .'+options.imageHoverClass, this).finish().fadeOut('fast');
+                            });
+                            $(link).click(function(e){
+                                e.preventDefault();
+                                // hide others
+                                notActive = $('> a', $(this).parent().siblings().not($(this).parent()));
+                                notActive.removeClass('active');
+                                $('> .'+options.imageHoverClass, notActive).finish().fadeOut('fast');
+                                // activate
+                                $(this).addClass('active');
+                                $('> .'+options.imageHoverClass, this).finish().fadeIn('fast');
+                                // show hero if needed
+                                if (options.heroEnable) {
+                                    // elements
+                                    hero = $('> div > div', element).get($(this).parent().index());
+                                    notActive = $('> div > div', element).not(hero);
+                                    // bring the active hero to the top
+                                    $(hero).css('z-index', '10');
+                                    // send the inactive heroes to the back
+                                    $(notActive).css('z-index', '0');
+                                    // hide and show
+                                    $(notActive).finish().slideUp('fast');
+                                    $(hero).finish().slideDown('fast');
+                                }
                             });
                         }
                     });
@@ -108,6 +151,22 @@
                     console.log('No link found!');
                 }
             });
+        },
+
+        // set hero
+        _setHero: function(element, options) {
+            // create hero container
+            if (!$('> .'+options.heroContainerClass, element).length) {
+                heroesContainer = $('<div>').addClass(options.heroContainerClass);
+                $(element).prepend(heroesContainer);
+            }
+            // move heroes in to the container
+            $('li', element).each(function(){
+                heroes = $('> div', this);
+                $('> div', element).append(heroes);
+            });
+            // Activate default hero
+            $('a', $('> ul > li', element).get(options.heroDefault)).click();
         }
     };
 
