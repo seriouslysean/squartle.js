@@ -2,7 +2,7 @@
 
 ### jQuery plugin to stylize a grid of image squares, including hover states
 
-Demonstrations available at the [official Squartle.js project page](http://http://splitleaf.github.io/Splitleaf_Squartle/).
+Demonstrations available at the [official Squartle.js project page](http://splitleaf.github.io/Splitleaf_Squartle/).
 
 ### Installation
 
