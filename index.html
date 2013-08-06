@@ -39,13 +39,13 @@
             html, body { background: #CCC; }
             div, ul, li { margin: 0; padding: 0; }
             code { background: #CDCDCD; display: block; width: auto; }
-            .content { background: #FFF; border: 1px solid #CDCDCD; margin: 100px auto 50px; padding: 25px; width: 908px; }
-            .squartle-hero {line-height:0;}
-            .squartle-hero * {line-height:normal;}
+            .content { background: #FFF; border: 1px solid #CDCDCD; margin: 100px auto 50px; padding: 0; max-width: 908px; width: 100%; }
+            .content > .inner { padding: 25px; }
+            .squartle-video {line-height:0;}
         </style>
     </head>
     <body>
-        <div class="content">
+        <div class="content"><div class="inner">
             <h1>Squartle.js</h1>
 
             <h2>Usage (Default)</h2>
@@ -56,25 +56,6 @@
     $('.squartle').squartle();
                 </code>
             </pre>
-            
-            <!--<h3>Markup</h3>
-            <pre>
-                <code>
-    &lt;div class=&quot;squartle&quot;&gt;
-        &lt;ul&gt;
-            &lt;li&gt;
-                &lt;a href=&quot;#1&quot; title=&quot;1&quot;&gt;
-                    &lt;img src=&quot;img/1.png&quot; alt=&quot;1&quot; data-hover=&quot;img/1h.png&quot;&gt;
-                &lt;/a&gt;
-                &lt;div&gt;
-                    &lt;img src=&quot;http://lorempixel.com/1200/400/animals/1&quot;&gt;      
-                &lt;/div&gt;
-            &lt;/li&gt;
-            &lt;li&gt;...&lt;/li&gt;
-        &lt;/ul&gt;
-    &lt;/div&gt;
-                </code>
-            </pre>
 
             <div class="squartle">
                 <ul>
@@ -139,90 +120,7 @@
                         <img src="img/8.png" alt="8" data-hover="img/8h.png">
                         </a>
                         <div>
-                            <iframe src="http://player.vimeo.com/video/70975460" width="1200" height="400" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>      
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#9" title="9">
-                        <img src="img/9.png" alt="9" data-hover="img/9h.png">
-                        </a>
-                        <div>
-                            <div style="height:400px;width:1200px;">
-                                <h1>This is just some text, maybe a pull quote or something?</h1>
-                                <h2>-The Internet</h2>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>-->
-
-            <h2>Initialize at any size</h2>
-
-            <div style="width:300px;margin:0 auto;">
-            <div class="squartle">
-                <ul>
-                    <li>
-                        <a href="#1" title="1">
-                        <img src="img/1.png" alt="1" data-hover="img/1h.png">
-                        </a>
-                        <div>
-                            <img src="http://lorempixel.com/1200/400/animals/1">      
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#2" title="2">
-                        <img src="img/2.png" alt="2" data-hover="img/2h.png">
-                        </a>
-                        <div>
-                            <img src="http://lorempixel.com/1200/400/animals/2">      
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#3" title="3">
-                        <img src="img/3.png" alt="3" data-hover="img/3h.png">
-                        </a>
-                        <div>
-                            <img src="http://lorempixel.com/1200/400/animals/3">      
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#4" title="4">
-                        <img src="img/4.png" alt="4" data-hover="img/4h.png">
-                        </a>
-                        <div>
-                            <img src="http://lorempixel.com/1200/400/animals/4">      
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#5" title="5">
-                        <img src="img/5.png" alt="5" data-hover="img/5h.png">
-                        </a>
-                        <div>
-                            <img src="http://lorempixel.com/1200/400/animals/5">      
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#6" title="6">
-                        <img src="img/6.png" alt="6" data-hover="img/6h.png">
-                        </a>
-                        <div>
-                            <img src="http://lorempixel.com/1200/400/animals/6">      
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#7" title="7">
-                        <img src="img/7.png" alt="7" data-hover="img/7h.png">
-                        </a>
-                        <div>
-                            <img src="http://lorempixel.com/1200/400/animals/7">      
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#8" title="8">
-                        <img src="img/8.png" alt="8" data-hover="img/8h.png">
-                        </a>
-                        <div>
-                            <iframe src="http://player.vimeo.com/video/70975460" width="300" height="100" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>      
+                            <iframe src="http://player.vimeo.com/video/70975460" width="500" height="281" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>      
                         </div>
                     </li>
                     <li>
@@ -235,8 +133,7 @@
                     </li>
                 </ul>
             </div>
-            </div>
 
-        </div>
+        </div></div>
     </body>
 </html>
