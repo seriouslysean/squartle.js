@@ -53,7 +53,6 @@
             this._setupStyles(this.element, this.options);
             this._setupHover(this.element, this.options);
             this._setupClick(this.element, this.options);
-            this._setupResize(this.element, this.options);
         },
 
         _setupOptions: function(element, options) {
