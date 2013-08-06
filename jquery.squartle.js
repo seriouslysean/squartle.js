@@ -22,8 +22,8 @@
     // overrideable defaults
     var defaults = {
         containerClass: "squartle-container",
-        heroContainerClass: "squartle-heroes",
         heroEnable: true,
+        heroContainerClass: "squartle-heroes",
         heroClass: "squartle-hero",
         heroDefault: 0,
         linkClass: "squartle-link",
@@ -31,7 +31,10 @@
         itemClass: "squartle-item",
         imageClass: "squartle-image",
         imageHoverClass: "squartle-image-hover",
-        itemsAcross: '3'
+        videoContainerClass: "squartle-videos",
+        videoClass: "squartle-video",
+        itemsAcross: 3,
+        videoCustomSelector: false
     };
 
     // plugin constructor
@@ -50,6 +53,7 @@
             this._setupStyles(this.element, this.options);
             this._setupHover(this.element, this.options);
             this._setupClick(this.element, this.options);
+            this._setupResize(this.element, this.options);
         },
 
         _setupOptions: function(element, options) {
@@ -85,7 +89,26 @@
                 // move heroes in to the container
                 $('li', element).each(function(){
                     heroes = $('> div', this).addClass(options.heroClass);
-                    //heroes.children().wrapAll('<div class="inner">');
+                    // setup videos if we have any
+                    $(heroes).each(function(){
+                        var selectors = [
+                            "iframe[src*='player.vimeo.com']",
+                            "iframe[src*='youtube.com']",
+                            "iframe[src*='youtube-nocookie.com']",
+                            "iframe[src*='kickstarter.com'][src*='video.html']",
+                            "object",
+                            "embed"
+                        ];
+                        // custom selector
+                        if (options.videoCustomSelector)
+                            selectors.push(options.videoCustomSelector);
+                        // setup sizing
+                        heroVideos = $(this).find(selectors.join(',')).not("object object");
+                        $(heroVideos).each(function(){
+                            heroVideos = $('<div>').addClass(options.videoContainerClass)
+                            $(this).addClass(options.videoClass).wrap(heroVideos);
+                        });
+                    });
                     $('> div', element).append(heroes);
                 });
             }
@@ -101,16 +124,34 @@
             // heroes
             $('.'+options.heroContainerClass, element).css({
                 position: 'relative',
-                height: '0',
+                height: 'auto',
                 overflow: 'hidden'
             });
             $('.'+options.heroClass, element).css({
                 position: 'absolute',
+                float: 'none',
                 height: 'auto',
                 top: '0',
                 left: '0',
                 'z-index': 0,
-                opacity: 0
+                opacity: 0,
+                overflow: 'hidden'
+            });
+            // videos
+            $('.'+options.videoContainerClass, element).css({
+                width: '100%',
+                height: '0'
+            });
+            videos = $('.'+options.videoClass, element);
+            $(videos).each(function(){
+                aspectRatio = $(this).height() / $(this).width();
+                $(this).parent().css('padding', '0 0 '+(aspectRatio*100)+'% 0');
+                $(this).css({
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%'
+                });
             });
             // list
             $('.'+options.listClass).css('display', 'inline');
@@ -177,11 +218,12 @@
                     hero = $('.'+options.heroClass, element).get($(this).parent().index());
                     heroAll = $('.'+options.heroClass, element);
                     heroNotActive = $('.'+options.heroClass, element).not(hero);
-                    $(heroAll).animate({'z-index': 0, opacity: 0}, { duration: 'fast', queue: false });
-                    $(hero).animate({'z-index': 10, opacity: 1}, { duration: 'fast', queue: false });
-                    $('.'+options.heroContainerClass, element).animate({
-                        height: $(hero).height()
-                    }, { duration: 'fast', queue: false });
+                    $(heroAll).removeClass('active')
+                        .css({position: 'absolute', float: 'left'})
+                        .animate({'z-index': 0, opacity: 0}, { duration: 'fast', queue: false });
+                    $(hero).addClass('active')
+                        .css({position: 'relative', float: 'none'})
+                        .animate({'z-index': 10, opacity: 1}, { duration: 'fast', queue: false });
                 }
             });
         }
