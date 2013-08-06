@@ -11,6 +11,25 @@ Include jquery.squartle.min.js *after* you load the jQuery library:
     <script src="/path/to/jquery.js"></script>
     <script src="/path/to/jquery.squartle.min.js"></script>
 
+### Markup
+
+Add as many list items as you need for your content.
+
+    <div class="squartle">
+      <ul>
+          <li>
+              <!-- Square -->
+              <a href="http://www.splitleaf.net" title="Splitleaf, LLC">
+                <img src="path/to/image/" alt="1" data-hover="path/to/image/hover/">
+              </a>
+              <!-- Hero -->
+              <div>
+                <img src="path/to/image/">
+              </div>
+          </li>
+      </ul>
+    </div>
+
 ### Usage (Default)
 
     $('.squartle').squartle();
@@ -42,4 +61,6 @@ Include jquery.squartle.min.js *after* you load the jQuery library:
 
 ### Planned
 
+* Adding containerMaxWidth and containerMinWidth options
 * Adding event hooks for various actions (linkClick, heroComplete, etc)
+* Adding/Improving support for elements other than images in the squares
