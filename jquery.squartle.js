@@ -57,6 +57,8 @@
 
         _setupOptions: function(element, options) {
             this.options.hasHeroes = $('> ul > li > div', element).length?true:false;
+            if (!this.options.hasHeroes)
+                this.options.heroEnable = false
         },
 
         _setupElements: function(element, options) {
@@ -81,7 +83,7 @@
                 }
             });
             // hero container if we need it
-            if (options.hasHeroes) {
+            if (options.heroEnable) {
                 heroesContainer = $('<div>')
                     .addClass(options.heroContainerClass)
                 $(element).prepend(heroesContainer);
@@ -212,7 +214,7 @@
                 $(this).addClass('active');
                 $('> .'+options.imageHoverClass, this).finish().fadeIn('fast');
                 // show hero if needed
-                if (options.hasHeroes) {
+                if (options.heroEnable) {
                     // elements
                     hero = $('.'+options.heroClass, element).get($(this).parent().index());
                     heroAll = $('.'+options.heroClass, element);
@@ -225,6 +227,12 @@
                         .animate({'z-index': 10, opacity: 1}, { duration: 'fast', queue: false });
                 }
             });
+
+            // Open default
+            if (options.heroEnable) {
+                defaultHero = $('.'+options.itemClass, element).get(options.heroDefault);
+                $('> .'+options.linkClass, defaultHero).click();
+            }
         }
     };
 
