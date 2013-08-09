@@ -21,20 +21,32 @@
     var pluginName = "squartle";
     // overrideable defaults
     var defaults = {
+        // container
         containerClass: "squartle-container",
+        containerMaxWidth: '100%',
+        containerMinWidth: '0',
+        // heroes
         heroEnable: true,
         heroContainerClass: "squartle-heroes",
         heroClass: "squartle-hero",
         heroDefault: 0,
-        linkClass: "squartle-link",
-        listClass: "squartle-items",
-        itemClass: "squartle-item",
-        imageClass: "squartle-image",
-        imageHoverClass: "squartle-image-hover",
         videoContainerClass: "squartle-videos",
         videoClass: "squartle-video",
+        videoCustomSelector: false,
+        // list
+        listClass: "squartle-items",
+        // items
         itemsAcross: 3,
-        videoCustomSelector: false
+        itemClass: "squartle-item",
+        // links
+        linkClass: "squartle-link",
+        // images
+        imageClass: "squartle-image",
+        imageHoverClass: "squartle-image-hover",
+        // events
+        beforeInit: function(){},
+        onLinkClick: function(){},
+        afterInit: function(){}
     };
 
     // plugin constructor
@@ -49,10 +61,12 @@
     Squartle.prototype = {
         init: function() {
             this._setupOptions(this.element, this.options);
+            this.options.beforeInit.call(this.element);
             this._setupElements(this.element, this.options);
             this._setupStyles(this.element, this.options);
             this._setupHover(this.element, this.options);
             this._setupClick(this.element, this.options);
+            this.options.afterInit.call(this.element);
         },
 
         _setupOptions: function(element, options) {
@@ -118,7 +132,8 @@
         _setupStyles: function(element, options) {
             // container
             $(element).css({
-                'max-width': '100%',
+                'max-width': options.containerMaxWidth,
+                'min-width': options.containerMinWidth,
                 overflow: 'hidden',
                 width: '100%'
             });
@@ -216,7 +231,7 @@
                 // show hero if needed
                 if (options.heroEnable) {
                     // elements
-                    hero = $('.'+options.heroClass, element).get($(this).parent().index());
+                    hero = $('.'+options.heroClass+':eq('+$(this).parent().index()+')', element);
                     heroAll = $('.'+options.heroClass, element);
                     heroNotActive = $('.'+options.heroClass, element).not(hero);
                     $(heroAll).removeClass('active')
@@ -226,11 +241,12 @@
                         .css({position: 'relative', float: 'none'})
                         .animate({'z-index': 10, opacity: 1}, { duration: 'fast', queue: false });
                 }
+                options.onLinkClick.call(this, element, options);
             });
 
             // Open default
             if (options.heroEnable) {
-                defaultHero = $('.'+options.itemClass, element).get(options.heroDefault);
+                defaultHero = $('.'+options.itemClass+':eq('+options.heroDefault+')', element);
                 $('> .'+options.linkClass, defaultHero).click();
             }
         }

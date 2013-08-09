@@ -43,24 +43,34 @@ Add as many list items as you need for your content.
 ### Options
 
     {
+      // container
       containerClass: "squartle-container", // CSS class for the container
-      heroClass: "squartle-hero", // CSS class for the heroes
-      heroContainerClass: "squartle-heroes", // CSS class for the hero container
-      heroDefault: 0, // Which hero to show first
+      containerMaxWidth: '100%', // Adds a max with for the container
+      containerMinWidth: '0', // Adds a min width for the container
+      // heroes
       heroEnable: true, // Whether or not hero banners will be enabled
-      imageClass: "squartle-image", // CSS class for the item images
-      imageHoverClass: "squartle-image-hover", // CSS class for the image hover state
-      itemClass: "squartle-item", // CSS class for the list items
-      itemsAcross: '3' // Maximum number of items across; width is automatically set
-      linkClass: "squartle-link", // CSS class for the link
-      listClass: "squartle-list", // CSS class for the list
+      heroContainerClass: "squartle-heroes", // CSS class for the hero container
+      heroClass: "squartle-hero", // CSS class for the heroes
+      heroDefault: 0, // Which hero to show first
       videoClass: "squartle-video", // CSS class for the hero video
       videoContainerClass: "squartle-videos", // CSS class for the hero video container
       videoCustomSelector: false // Custom jquery selector for targeting different video providers (e.g. "iframe[src*='youtube.com']")
+      // list
+      listClass: "squartle-items", // CSS class for the list
+      // items
+      itemsAcross: 3, // Maximum number of items across; item width is automatically set to a percentage (100/itemsAcross)
+      itemClass: "squartle-item", // CSS class for the list items
+      // links
+      linkClass: "squartle-link", // CSS class for the link
+      // images
+      imageClass: "squartle-image", // CSS class for the item images
+      imageHoverClass: "squartle-image-hover", // CSS class for the image hover state
+      // events
+      beforeInit: function(){}, // Fires before the plugin initializes
+      onLinkClick: function(){}, // Fires after a link is clicked initializes
+      afterInit: function(){} // Fires after the plugin initializes
     }
 
 ### Planned
-
-* Adding containerMaxWidth and containerMinWidth options
-* Adding event hooks for various actions (linkClick, heroComplete, etc)
-* Adding/Improving support for elements other than images in the squares
+* Adding additional event hooks for various actions (
+* Adding/Improving support for elements other than images in the squares/heroes
