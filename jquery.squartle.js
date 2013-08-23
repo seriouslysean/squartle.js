@@ -66,6 +66,7 @@
             this._setupStyles(this.element, this.options);
             this._setupHover(this.element, this.options);
             this._setupClick(this.element, this.options);
+            //this._setupResize(this.element, this.options);
             this.options.afterInit.call(this.element);
         },
 
@@ -76,36 +77,36 @@
         },
 
         _setupElements: function(element, options) {
-            // add hover images
-            $('> ul > li img', element).each(function(){
-                // Image class
-                $(this).addClass(options.imageClass);
-                // Link class
-                $(this).parentsUntil(element, 'a').addClass(options.linkClass);
-                // Item class
-                $(this).parentsUntil(element, 'li').addClass(options.itemClass);
-                // List class
-                $(this).parentsUntil(element, 'ul').addClass(options.listClass);
-                if ($(this).data('hover')) {
-                    hover = $('<img>')
-                        .attr({
-                            'src': $(this).data('hover'),
-                            'alt': $(this).attr('alt')
-                        })
-                        .addClass(options.imageHoverClass);
-                    $($(this).parent()).append(hover);        
-                }
-            });
             // hero container if we need it
             if (options.heroEnable) {
                 heroesContainer = $('<div>')
                     .addClass(options.heroContainerClass)
                 $(element).prepend(heroesContainer);
-                // move heroes in to the container
-                $('li', element).each(function(){
-                    heroes = $('> div', this).addClass(options.heroClass);
+            }
+            // classes
+            $('li', element).each(function(){
+                // Image class
+                $('img', this).addClass(options.imageClass);
+                // Link class
+                $('> a', this).addClass(options.linkClass);
+                // Item class
+                $(this).addClass(options.itemClass);
+                // List class
+                $(this).parentsUntil(element, 'ul').addClass(options.listClass);
+                if ($('> a', this).data('hover')) {
+                    hover = $('<img>')
+                        .attr({
+                            'src': $('> a', this).data('hover')
+                        })
+                        .addClass(options.imageHoverClass);
+                    $('> a', this).append(hover);        
+                }
+                // heroes
+                if (options.heroEnable) {
+                    heroes   = $('> div', $(this).not('.no-hero')).addClass(options.heroClass);
                     // setup videos if we have any
                     $(heroes).each(function(){
+                        $(this).attr('id', options.heroClass+'-'+$(this).parents('li').index());
                         var selectors = [
                             "iframe[src*='player.vimeo.com']",
                             "iframe[src*='youtube.com']",
@@ -125,13 +126,14 @@
                         });
                     });
                     $('> div', element).append(heroes);
-                });
-            }
+                }
+            });
         },
 
         _setupStyles: function(element, options) {
             // container
             $(element).css({
+                'font-size': '100%',
                 'max-width': options.containerMaxWidth,
                 'min-width': options.containerMinWidth,
                 overflow: 'hidden',
@@ -180,6 +182,7 @@
                 position: 'relative',
                 width: width+'%'
             });
+            $('.'+options.itemClass, element).css('height', $('.'+options.itemClass, element).not('.no-hero').width());
             // links
             $('.'+options.linkClass).css('display', 'inline');
             // images
@@ -231,7 +234,7 @@
                 // show hero if needed
                 if (options.heroEnable) {
                     // elements
-                    hero = $('.'+options.heroClass+':eq('+$(this).parent().index()+')', element);
+                    hero = $('#'+options.heroClass+'-'+$(this).parent().index()+'.'+options.heroClass, element);
                     heroAll = $('.'+options.heroClass, element);
                     heroNotActive = $('.'+options.heroClass, element).not(hero);
                     $(heroAll).removeClass('active')
@@ -239,7 +242,11 @@
                         .animate({'z-index': 0, opacity: 0}, { duration: 'fast', queue: false });
                     $(hero).addClass('active')
                         .css({position: 'relative', float: 'none'})
-                        .animate({'z-index': 10, opacity: 1}, { duration: 'fast', queue: false });
+                        .animate({'z-index': 10, opacity: 1}, {duration: 'fast', queue: false, complete: function(){
+                            $('html,body').animate({
+                                scrollTop: $(element).offset().top
+                            });
+                        }});
                 }
                 options.onLinkClick.call(this, element, options);
             });
@@ -249,6 +256,12 @@
                 defaultHero = $('.'+options.itemClass+':eq('+options.heroDefault+')', element);
                 $('> .'+options.linkClass, defaultHero).click();
             }
+        },
+
+        _setupResize: function(element, options) {
+            $(window).resize(function(){
+                $('.'+options.itemClass, element).css('height', $('.'+options.itemClass, element).not('.no-hero').width());
+            });
         }
     };
 
