@@ -238,10 +238,10 @@
                     heroAll = $('.'+options.heroClass, element);
                     heroNotActive = $('.'+options.heroClass, element).not(hero);
                     $(heroAll).removeClass('active')
-                        .css({position: 'absolute', float: 'left'})
+                        .css({position: 'absolute', float: 'left', width: '100%'})
                         .animate({'z-index': 0, opacity: 0}, { duration: 'fast', queue: false });
                     $(hero).addClass('active')
-                        .css({position: 'relative', float: 'none'})
+                        .css({position: 'relative', float: 'none', width: '100%'})
                         .animate({'z-index': 10, opacity: 1}, {duration: 'fast', queue: false, complete: function(){
                             $('html,body').animate({
                                 scrollTop: $(element).offset().top
