@@ -21,6 +21,7 @@
     var pluginName = "squartle";
     // overrideable defaults
     var defaults = {
+        firstRun: true,
         // container
         containerClass: "squartle-container",
         containerMaxWidth: '100%',
@@ -66,7 +67,7 @@
             this._setupStyles(this.element, this.options);
             this._setupHover(this.element, this.options);
             this._setupClick(this.element, this.options);
-            //this._setupResize(this.element, this.options);
+            this._setupResize(this.element, this.options);
             this.options.afterInit.call(this.element);
         },
 
@@ -243,9 +244,13 @@
                     $(hero).addClass('active')
                         .css({position: 'relative', float: 'none', width: '100%'})
                         .animate({'z-index': 10, opacity: 1}, {duration: 'fast', queue: false, complete: function(){
-                            $('html,body').animate({
-                                scrollTop: $(element).offset().top
-                            });
+                            if (options.firstRun) {
+                                options.firstRun = false;
+                            } else {
+                                $('html,body').animate({
+                                    scrollTop: $(element).offset().top
+                                });
+                            }
                         }});
                 }
                 options.onLinkClick.call(this, element, options);
@@ -254,7 +259,8 @@
             // Open default
             if (options.heroEnable) {
                 defaultHero = $('.'+options.itemClass+':eq('+options.heroDefault+')', element);
-                $('> .'+options.linkClass, defaultHero).click();
+                $('> .'+options.linkClass, defaultHero).addClass('no-scroll').click();
+                $('> .'+options.linkClass, defaultHero).removeClass('no-scroll');
             }
         },
 
