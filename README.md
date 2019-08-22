@@ -2,8 +2,6 @@
 
 ### jQuery plugin to create a grid of fully responsive squares including hover states with an optional banner
 
-Demonstrations available at the [official Squartle.js project page](http://splitleaf.github.io/squartle.js/).
-
 ### Installation
 
 Include jquery.squartle.min.js *after* you load the jQuery library:
